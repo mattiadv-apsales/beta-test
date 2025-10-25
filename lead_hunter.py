@@ -27,7 +27,7 @@ from playwright.sync_api import sync_playwright, TimeoutError as PlayTimeoutErro
 # ------------------------ CONFIG ------------------------
 QUERY_PROMPT = "Inserisci la query di ricerca (es. lezione gratuita): "
 PLATFORMS = ["meta", "reddit", "linkedin"]
-MAX_PER_PLATFORM = 30            # massimo lead raccolti per piattaforma
+MAX_PER_PLATFORM = 50            # massimo lead raccolti per piattaforma
 MAX_PER_DOMAIN = 30              # massimo lead per singolo dominio
 POLITE_SLEEP = 1.0               # pausa fra richieste (s)
 PAGE_TIMEOUT = 20000             # ms playwrght page load timeout
