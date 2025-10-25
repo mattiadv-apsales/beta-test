@@ -227,42 +227,67 @@ def analyze_landing(page, landing_url):
     return info
 
 # ---------------- PIPELINE ----------------
+# ---------------- PIPELINE OTTIMIZZATA PER RENDER ----------------
 def run_pipeline(query):
     results=[]
     per_platform=defaultdict(int)
     per_domain_count=defaultdict(int)
+
     with sync_playwright() as pw:
-        browser=pw.chromium.launch(headless=True)
-        page=browser.new_page()
-        try: page.set_extra_http_headers({"User-Agent":ua.random})
+        # Launch Chromium con no-sandbox per Render
+        browser = pw.chromium.launch(headless=True, args=["--no-sandbox"])
+        page = browser.new_page()
+        try:
+            page.set_extra_http_headers({"User-Agent": ua.random})
         except: pass
+
         for platform in PLATFORMS:
             if per_platform[platform]>=MAX_PER_PLATFORM: continue
-            if platform=="meta": candidates=scrape_meta_ads(page, query, MAX_PER_PLATFORM)
-            elif platform=="reddit": candidates=scrape_reddit(page, query, MAX_PER_PLATFORM)
-            elif platform=="linkedin": candidates=scrape_linkedin(page, query, MAX_PER_PLATFORM)
+
+            if platform=="meta": candidates = scrape_meta_ads(page, query, MAX_PER_PLATFORM)
+            elif platform=="reddit": candidates = scrape_reddit(page, query, MAX_PER_PLATFORM)
+            elif platform=="linkedin": candidates = scrape_linkedin(page, query, MAX_PER_PLATFORM)
             else: candidates=[]
+
             for cand in candidates:
                 if per_platform[platform]>=MAX_PER_PLATFORM: break
-                landing=cand.get("landing")
+                landing = cand.get("landing")
                 if not landing or is_blocked_social(landing): continue
-                dom=domain_of(landing)
+                dom = domain_of(landing)
                 if per_domain_count[dom]>=MAX_PER_DOMAIN: continue
-                try: analysis=analyze_landing(page, landing)
-                except: continue
-                lead={"platform":platform,"source_title":cand.get("title") or cand.get("text",""),
-                      "landing":landing,"domain":dom,"analysis":analysis,
-                      "collected_at":time.strftime("%Y-%m-%d %H:%M:%S")}
+
+                # Apri una nuova pagina temporanea per ciascun landing
+                try:
+                    landing_page = browser.new_page()
+                    landing_page.set_extra_http_headers({"User-Agent": ua.random})
+                    analysis = analyze_landing(landing_page, landing)
+                    landing_page.close()  # Chiudi subito la pagina
+                except:
+                    continue
+
+                lead = {
+                    "platform": platform,
+                    "source_title": cand.get("title") or cand.get("text",""),
+                    "landing": landing,
+                    "domain": dom,
+                    "analysis": analysis,
+                    "collected_at": time.strftime("%Y-%m-%d %H:%M:%S")
+                }
                 results.append(lead)
-                per_platform[platform]+=1
-                per_domain_count[dom]+=1
+                per_platform[platform] += 1
+                per_domain_count[dom] += 1
                 time.sleep(POLITE_SLEEP)
+
+        page.close()
         browser.close()
+
     # sort by score
-    sorted_results=sorted(results,key=lambda r:r["analysis"].get("score",0),reverse=True)
+    sorted_results = sorted(results, key=lambda r: r["analysis"].get("score",0), reverse=True)
+
     # save JSON
-    with open("leads.json","w",encoding="utf-8") as f:
-        json.dump(sorted_results,f,ensure_ascii=False,indent=2)
+    with open("leads.json","w", encoding="utf-8") as f:
+        json.dump(sorted_results, f, ensure_ascii=False, indent=2)
+
     print(f"Saved {len(sorted_results)} leads to leads.json")
     return sorted_results
 
