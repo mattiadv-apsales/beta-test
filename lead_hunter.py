@@ -25,7 +25,7 @@ import textstat
 from playwright.sync_api import sync_playwright, TimeoutError as PlayTimeoutError
 
 # ------------------------ CONFIG ------------------------
-QUERY_PROMPT = "Inserisci la query di ricerca (es. lezione gratuita): "
+QUERY_PROMPT = "Inserisci la query di ricerca (es. prenota lezione gratuita): "
 PLATFORMS = ["meta", "reddit", "linkedin"]
 MAX_PER_PLATFORM = 100            # massimo lead raccolti per piattaforma
 MAX_PER_DOMAIN = 100              # massimo lead per singolo dominio
