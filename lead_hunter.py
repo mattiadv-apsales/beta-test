@@ -15,17 +15,17 @@ import textstat
 from playwright.sync_api import sync_playwright, TimeoutError as PlayTimeoutError
 
 # ---------------- CONFIG ----------------
-QUERY_PROMPT = "Inserisci la query di ricerca: "
+QUERY_PROMPT = "Query: "
 PLATFORMS = ["meta", "reddit", "linkedin"]
 MAX_PER_PLATFORM = 200
 MAX_PER_DOMAIN = 200
 POLITE_SLEEP = 1.0
-PAGE_TIMEOUT = 20000
+PAGE_TIMEOUT = 20000  # ms
 
 SOCIAL_BLOCK_DOMAINS = {
     "reddit.com", "redditinc.com", "redditblog.com", "metastatus.com",
     "reddithelp.com", "facebook.com","m.facebook.com","whatsapp.com",
-    "wa.me","t.me","t.co","bit.ly","instagram.com","docs.google.com",
+    "wa.me","t.me","t.co","instagram.com","docs.google.com",
     "forms.gle","fb.com", "zoom.us"
 }
 
@@ -56,31 +56,18 @@ def is_blocked_social(url):
 
 def extract_emails(text):
     emails = EMAIL_RE.findall(text or "")
-    for e in emails:
-        if "@" in e and "..." not in e:
-            return [e]
-    return []
+    return [e for e in emails if "@" in e and "..." not in e]
 
 def extract_phones(text):
-    """
-    Estrae un solo numero italiano valido dal testo.
-    Numeri mobili: 3XXXXXXXXX
-    Numeri fissi: 0XXXXXXXXX
-    Ritorna solo il primo numero valido.
-    """
-    # rimuove tutto tranne cifre
     digits_only = re.sub(r"\D", "", text)
-    # trova sequenze di almeno 9 cifre che iniziano con 0 o 3
     candidates = re.findall(r"(?:0|3)\d{8,9}", digits_only)
-
     for p in candidates:
         if len(p) == 10:
-            if p.startswith("0"):  # fisso
+            if p.startswith("0"):
                 return ["+39" + p]
-            elif p.startswith("3"):  # mobile
+            elif p.startswith("3"):
                 return ["+39" + p]
     return []
-
 
 def domain_of(url):
     try:
@@ -201,7 +188,10 @@ def analyze_landing(page, landing_url):
     except PlayTimeoutError:
         try: html=requests.get(landing_url, headers=HEADERS, timeout=8).text
         except: html=""
-    except: html=""
+    except:
+        try: html=requests.get(landing_url, headers=HEADERS, timeout=8).text
+        except: html=""
+
     if not html: return info
     soup=BeautifulSoup(html,"html.parser")
     info["title"]=soup.title.string.strip() if soup.title else ""
@@ -231,48 +221,61 @@ def run_pipeline(query):
     per_domain_count=defaultdict(int)
 
     with sync_playwright() as pw:
-        browser = pw.chromium.launch(headless=True, args=["--no-sandbox"])
-        page = browser.new_page()
-        try: page.set_extra_http_headers({"User-Agent": ua.random})
-        except: pass
+        browser = pw.chromium.launch(
+            headless=True,
+            args=[
+                "--no-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-gpu",
+                "--single-process",
+                "--disable-background-networking",
+                "--disable-background-timer-throttling",
+                "--disable-client-side-phishing-detection",
+                "--disable-default-apps",
+                "--disable-extensions",
+            ],
+            timeout=60000
+        )
+        try:
+            with browser.new_page() as page:
+                try: page.set_extra_http_headers({"User-Agent": ua.random})
+                except: pass
 
-        for platform in PLATFORMS:
-            if per_platform[platform]>=MAX_PER_PLATFORM: continue
-            if platform=="meta": candidates=scrape_meta_ads(page, query, MAX_PER_PLATFORM)
-            elif platform=="reddit": candidates=scrape_reddit(page, query, MAX_PER_PLATFORM)
-            elif platform=="linkedin": candidates=scrape_linkedin(page, query, MAX_PER_PLATFORM)
-            else: candidates=[]
+                for platform in PLATFORMS:
+                    if per_platform[platform]>=MAX_PER_PLATFORM: continue
+                    if platform=="meta": candidates=scrape_meta_ads(page, query, MAX_PER_PLATFORM)
+                    elif platform=="reddit": candidates=scrape_reddit(page, query, MAX_PER_PLATFORM)
+                    elif platform=="linkedin": candidates=scrape_linkedin(page, query, MAX_PER_PLATFORM)
+                    else: candidates=[]
 
-            for cand in candidates:
-                if per_platform[platform]>=MAX_PER_PLATFORM: break
-                landing=cand.get("landing")
-                if not landing or is_blocked_social(landing): continue
-                dom=domain_of(landing)
-                if per_domain_count[dom]>=MAX_PER_DOMAIN: continue
+                    for cand in candidates:
+                        if per_platform[platform]>=MAX_PER_PLATFORM: break
+                        landing=cand.get("landing")
+                        if not landing or is_blocked_social(landing): continue
+                        dom=domain_of(landing)
+                        if per_domain_count[dom]>=MAX_PER_DOMAIN: continue
 
-                try:
-                    landing_page = browser.new_page()
-                    landing_page.set_extra_http_headers({"User-Agent": ua.random})
-                    analysis=analyze_landing(landing_page, landing)
-                    landing_page.close()
-                except:
-                    continue
+                        try:
+                            with browser.new_page() as landing_page:
+                                try: landing_page.set_extra_http_headers({"User-Agent": ua.random})
+                                except: pass
+                                analysis=analyze_landing(landing_page, landing)
+                        except: continue
 
-                lead={
-                    "platform": platform,
-                    "source_title": cand.get("title") or cand.get("text",""),
-                    "landing": landing,
-                    "domain": dom,
-                    "analysis": analysis,
-                    "collected_at": time.strftime("%Y-%m-%d %H:%M:%S")
-                }
-                results.append(lead)
-                per_platform[platform]+=1
-                per_domain_count[dom]+=1
-                time.sleep(POLITE_SLEEP)
-
-        page.close()
-        browser.close()
+                        lead={
+                            "platform": platform,
+                            "source_title": cand.get("title") or cand.get("text",""),
+                            "landing": landing,
+                            "domain": dom,
+                            "analysis": analysis,
+                            "collected_at": time.strftime("%Y-%m-%d %H:%M:%S")
+                        }
+                        results.append(lead)
+                        per_platform[platform]+=1
+                        per_domain_count[dom]+=1
+                        time.sleep(POLITE_SLEEP)
+        finally:
+            browser.close()
 
     sorted_results=sorted(results, key=lambda r:r["analysis"].get("score",0), reverse=True)
     with open("leads.json","w", encoding="utf-8") as f:

@@ -1,136 +1,247 @@
 [
   {
     "platform": "meta",
-    "source_title": "CAMBRIDGEACADEMYPALERMO.IT/HOCUS-LOTUSOpen Day 7 e 8 OttobreCambridge Academy a Palermo offre il percorso formativo MyPathway è un percorso di apprendimento completo che segue il bambino nella sua cre",
-    "landing": "https://www.cambridgeacademypalermo.it/hocus-lotus",
-    "domain": "cambridgeacademypalermo.it",
+    "source_title": "EFFEFCONSULTING.ITRichiedi il corso gratuitoDirettamente nella tua aziendaLearn More",
+    "landing": "https://www.effefconsulting.it/",
+    "domain": "effefconsulting.it",
     "analysis": {
-      "url": "https://www.cambridgeacademypalermo.it/hocus-lotus",
+      "url": "https://www.effefconsulting.it/",
       "emails": [
-        "info@cambridgeacademy1965.it"
+        "effe.fconsulting@gmail.com"
+      ],
+      "phones": [
+        "+393000150048"
+      ],
+      "contact_page": "https://www.effefconsulting.it/#contattaci",
+      "has_contact_form": true,
+      "has_schema": true,
+      "has_cta": true,
+      "copy_quality": 0.3,
+      "title": "Home - EffeF Consulting",
+      "score": 91
+    },
+    "collected_at": "2025-10-25 19:38:30"
+  },
+  {
+    "platform": "meta",
+    "source_title": "Formazione gratuita onlineVuoi lavorare in ambito amministrativo o contabile?\nPartecipa al corso gratuito online di Contabilità, finanziato dal Programma GOL.\n💻 Le lezioni si svolgono in modalità FAD,",
+    "landing": "https://www.ricamacademy.it/programma-gol/corsi-programma-gol/",
+    "domain": "ricamacademy.it",
+    "analysis": {
+      "url": "https://www.ricamacademy.it/programma-gol/corsi-programma-gol/",
+      "emails": [
+        "flags@2x.png"
+      ],
+      "phones": [
+        "+393564695163"
+      ],
+      "contact_page": "https://www.ricamacademy.it/contatti/",
+      "has_contact_form": true,
+      "has_schema": true,
+      "has_cta": true,
+      "copy_quality": 0.3,
+      "title": "Corsi Gratuiti Programma GOL Lombardia | RicamAcademy",
+      "score": 91
+    },
+    "collected_at": "2025-10-25 19:38:44"
+  },
+  {
+    "platform": "meta",
+    "source_title": "SERENISSIMATECNOLOGIE.COMDevi aprire un nuovo centro? Learn More",
+    "landing": "https://www.serenissimatecnologie.com/",
+    "domain": "serenissimatecnologie.com",
+    "analysis": {
+      "url": "https://www.serenissimatecnologie.com/",
+      "emails": [
+        "serenissima.tecnolog@libero.it"
       ],
       "phones": [
         "+393199923762"
       ],
-      "contact_page": "https://www.cambridgeacademypalermo.it/contatti",
+      "contact_page": "https://www.serenissimatecnologie.com/contatti",
       "has_contact_form": true,
       "has_schema": true,
       "has_cta": true,
       "copy_quality": 0.3,
-      "title": "Percorso formativo completo | Palermo | Cambridge Academy",
+      "title": "Apparecchiature per centri estetici a Venezia | Serenissima Tecnologia",
       "score": 91
     },
-    "collected_at": "2025-10-25 19:13:45"
+    "collected_at": "2025-10-25 19:38:53"
   },
   {
     "platform": "meta",
-    "source_title": "BIA.ITScopri il tuo talento musicale!Test attitudinale + lezione di prova gratuitaScopri di più",
-    "landing": "https://bia.it/",
-    "domain": "bia.it",
+    "source_title": "https://restauriedilizi.com/2018/09/12/ristrutturazione-bagni-e-piastrelle-foligno-restauri-edilizi-di-de-martino-domenico/",
+    "landing": "https://restauriedilizi.com/2018/09/12/ristrutturazione-bagni-e-piastrelle-foligno-restauri-edilizi-di-de-martino-domenico/",
+    "domain": "restauriedilizi.com",
     "analysis": {
-      "url": "https://bia.it/",
+      "url": "https://restauriedilizi.com/2018/09/12/ristrutturazione-bagni-e-piastrelle-foligno-restauri-edilizi-di-de-martino-domenico/",
       "emails": [
-        "accademia@bia.it"
+        "restauriedilizi@gmail.com"
       ],
       "phones": [
-        "+390405000000"
+        "+390100070110"
       ],
-      "contact_page": "https://bia.it/contatti/",
-      "has_contact_form": false,
-      "has_schema": true,
-      "has_cta": true,
-      "copy_quality": 0.3,
-      "title": "Accademia musicale Bari - bia.it",
-      "score": 83
-    },
-    "collected_at": "2025-10-25 19:13:57"
-  },
-  {
-    "platform": "meta",
-    "source_title": "",
-    "landing": "https://metodotoddler.com/sp/lezione-gratuita-to-take/",
-    "domain": "metodotoddler.com",
-    "analysis": {
-      "url": "https://metodotoddler.com/sp/lezione-gratuita-to-take/",
-      "emails": [
-        "20info@metodotoddler.com"
-      ],
-      "phones": [
-        "+393110003335"
-      ],
-      "contact_page": null,
+      "contact_page": "https://restauriedilizi.com/contatti/",
       "has_contact_form": true,
       "has_schema": true,
       "has_cta": true,
       "copy_quality": 0.3,
-      "title": "Lezione Gratuita – TO TAKE - metodotoddler.com",
-      "score": 81
+      "title": "Bagni e piastrelle, rifacciamo il tuo bagno in breve tempo a Foligno. Contattaci subito. - Restauri Edilizi di De Martino Domenico",
+      "score": 91
     },
-    "collected_at": "2025-10-25 19:13:40"
+    "collected_at": "2025-10-25 19:38:57"
   },
   {
     "platform": "meta",
-    "source_title": "",
-    "landing": "https://metodotoddler.com/sp/vsl-travel-in/",
-    "domain": "metodotoddler.com",
+    "source_title": "ARTELETTRIC.SHOPTre livelli di protezione Get Quote",
+    "landing": "https://www.artelettric.shop/it/news-94/richiedi-un-preventivo.html",
+    "domain": "artelettric.shop",
     "analysis": {
-      "url": "https://metodotoddler.com/sp/vsl-travel-in/",
+      "url": "https://www.artelettric.shop/it/news-94/richiedi-un-preventivo.html",
       "emails": [
-        "20info@metodotoddler.com"
+        "info@artelettric.shop"
       ],
       "phones": [
-        "+393110001880"
+        "+393673746703"
       ],
-      "contact_page": null,
+      "contact_page": "https://www.artelettric.shop/easypages/page.asp?pageid=2",
       "has_contact_form": true,
-      "has_schema": true,
-      "has_cta": true,
-      "copy_quality": 0.3,
-      "title": "Inglese per Viaggiare",
-      "score": 81
-    },
-    "collected_at": "2025-10-25 19:13:42"
-  },
-  {
-    "platform": "meta",
-    "source_title": "AIKIDOAOSTA.ITCorsi di Akido - prova gratuita",
-    "landing": "https://www.aikidoaosta.it/",
-    "domain": "aikidoaosta.it",
-    "analysis": {
-      "url": "https://www.aikidoaosta.it/",
-      "emails": [],
-      "phones": [
-        "+393000150016"
-      ],
-      "contact_page": "https://www.aikidoaosta.it/contact/",
-      "has_contact_form": false,
       "has_schema": false,
       "has_cta": true,
       "copy_quality": 0.3,
-      "title": "Yomi Shin Tai Aikido Valle d'Aosta  – Aikido – Difesa Personale – Sport & Wellness –",
-      "score": 45
+      "title": "Artelettric Shop sistemi di allarme per abitazioni | impianti allarme abitazioni | impianti allarme casa prezzi | Richiedi un Preventivo",
+      "score": 83
     },
-    "collected_at": "2025-10-25 19:13:49"
+    "collected_at": "2025-10-25 19:38:21"
   },
   {
     "platform": "meta",
-    "source_title": "SHARE.GOOGLESECHIScopri di più",
-    "landing": "https://share.google/Fc2XQv1dvmhDccjSk",
-    "domain": "share.google",
+    "source_title": "WWW.MIGLIORITENDETORINO.ITTende da solePiù spazio - Più privacy - Più risparmioRichiedi preventivo",
+    "landing": "https://www.miglioritendetorino.it/tende-veranda",
+    "domain": "miglioritendetorino.it",
     "analysis": {
-      "url": "https://share.google/Fc2XQv1dvmhDccjSk",
-      "emails": [],
+      "url": "https://www.miglioritendetorino.it/tende-veranda",
+      "emails": [
+        "info@miglioritendetorino.it"
+      ],
       "phones": [
-        "+393401811956"
+        "+393199923764"
+      ],
+      "contact_page": "https://www.miglioritendetorino.it/contatti",
+      "has_contact_form": true,
+      "has_schema": true,
+      "has_cta": false,
+      "copy_quality": 0.3,
+      "title": "Tende veranda | Torino | Migliori Tende da sole e Serramenti",
+      "score": 79
+    },
+    "collected_at": "2025-10-25 19:38:50"
+  },
+  {
+    "platform": "meta",
+    "source_title": "https://tally.so/r/medd1l",
+    "landing": "https://tally.so/r/medd1l",
+    "domain": "tally.so",
+    "analysis": {
+      "url": "https://tally.so/r/medd1l",
+      "emails": [
+        "hello@tally.so."
+      ],
+      "phones": [
+        "+393010101400"
       ],
       "contact_page": null,
       "has_contact_form": true,
       "has_schema": false,
       "has_cta": false,
-      "copy_quality": 0.0,
-      "title": "https://www.google.com/search?sca_esv=d19d5628732e2c11&sxsrf=AE3TifP4nXNnHtMLKJJE1VFgBSFRzJ_z6A:1761402712440&kgmid=/g/11w8s8xwnm&q=GioGym&shndl=30&shem=lcuae,uaasie,shrtsdl&source=sh/x/loc/uni/m1/1&kgs=f6f199871a105511&utm_source=lcuae,uaasie,shrtsdl,sh/x/loc/uni/m1/1&sei=PgX9aO--M-HT1sQPg52jsQU",
-      "score": 28
+      "copy_quality": 0.6,
+      "title": "NOVA RESET DAY: Open Day gratuito!                                   Ritrova la linea ed elimina il 30% di grasso in più, già dalla prima seduta e senza provare dolore.",
+      "score": 65
     },
-    "collected_at": "2025-10-25 19:13:36"
+    "collected_at": "2025-10-25 19:38:47"
+  },
+  {
+    "platform": "meta",
+    "source_title": "Content + AI = crescita 🔥Impara a creare contenuti con l’AI 🚀 Learn More",
+    "landing": "https://join.marcomontemagno.com/content-e-marketing/",
+    "domain": "marcomontemagno.com",
+    "analysis": {
+      "url": "https://join.marcomontemagno.com/content-e-marketing/",
+      "emails": [],
+      "phones": [
+        "+390100200300"
+      ],
+      "contact_page": null,
+      "has_contact_form": true,
+      "has_schema": false,
+      "has_cta": true,
+      "copy_quality": 0.6,
+      "title": "Content e Marketing - Marco Montemagno",
+      "score": 47
+    },
+    "collected_at": "2025-10-25 19:38:41"
+  },
+  {
+    "platform": "meta",
+    "source_title": "Standard pubblicitari",
+    "landing": "https://transparency.meta.com/policies/ad-standards/",
+    "domain": "meta.com",
+    "analysis": {
+      "url": "https://transparency.meta.com/policies/ad-standards/",
+      "emails": [],
+      "phones": [
+        "+390000000500"
+      ],
+      "contact_page": null,
+      "has_contact_form": false,
+      "has_schema": false,
+      "has_cta": true,
+      "copy_quality": 0.0,
+      "title": "Introduction to the Advertising Standards | Transparency Center",
+      "score": 32
+    },
+    "collected_at": "2025-10-25 19:39:00"
+  },
+  {
+    "platform": "meta",
+    "source_title": "https://go.energyalab.it/opt-in",
+    "landing": "https://go.energyalab.it/opt-in",
+    "domain": "energyalab.it",
+    "analysis": {
+      "url": "https://go.energyalab.it/opt-in",
+      "emails": [],
+      "phones": [
+        "+393081611340"
+      ],
+      "contact_page": null,
+      "has_contact_form": false,
+      "has_schema": false,
+      "has_cta": false,
+      "copy_quality": 0.6,
+      "title": "Corso KNX gratuito",
+      "score": 27
+    },
+    "collected_at": "2025-10-25 19:38:24"
+  },
+  {
+    "platform": "meta",
+    "source_title": "ENERGYALAB.IT🎓 Corso KNX gratuitoAccesso limitato ⏳Sign Up",
+    "landing": "https://go.energyalab.it/Opt-In",
+    "domain": "energyalab.it",
+    "analysis": {
+      "url": "https://go.energyalab.it/Opt-In",
+      "emails": [],
+      "phones": [
+        "+393081611340"
+      ],
+      "contact_page": null,
+      "has_contact_form": false,
+      "has_schema": false,
+      "has_cta": false,
+      "copy_quality": 0.6,
+      "title": "Corso KNX gratuito",
+      "score": 27
+    },
+    "collected_at": "2025-10-25 19:38:27"
   }
 ]
