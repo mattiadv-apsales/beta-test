@@ -36,7 +36,7 @@ OUTPUT_REPORT = "leads_report.txt"
 OUTPUT_SORTED = "leads_sorted_by_score.txt"
 OUTPUT_TOP25 = "top25.txt"
 
-SOCIAL_BLOCK_DOMAINS = {"facebook.com", "m.facebook.com", "whatsapp.com", "wa.me", "t.me", "t.co", "bit.ly"}
+SOCIAL_BLOCK_DOMAINS = {"facebook.com", "m.facebook.com", "whatsapp.com", "wa.me", "t.me", "t.co", "bit.ly", "instagram.com"}
 
 ua = UserAgent()
 HEADERS = {"User-Agent": ua.random}
