@@ -33,13 +33,13 @@ def api_scrape():
         return jsonify({"error": "Query vuota"}), 400
 
     try:
-        # avvia pipeline scraping
         leads = lead_hunter.run_pipeline(query)
-        latest_leads = leads  # salva in memoria per esportazioni
+        print(f"[DEBUG] Lead trovati: {len(leads)}")  # <-- aggiungi questa riga
+        latest_leads = leads
         return jsonify(leads)
     except Exception as e:
+        print(f"[ERROR] {str(e)}")
         return jsonify({"error": f"Errore durante l'analisi: {str(e)}"}), 500
-
 
 @app.route('/export/csv')
 def export_csv():
