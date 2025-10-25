@@ -3,6 +3,14 @@ import lead_hunter  # il tuo script esistente
 import csv
 import json
 from io import StringIO
+import subprocess
+import os
+
+# ---------------- PLAYWRIGHT FIX ----------------
+# se i browser non sono installati, li installa automaticamente
+if not os.path.exists(os.path.expanduser("~/.cache/ms-playwright")):
+    print("Playwright browsers non trovati, installo Chromium...")
+    subprocess.run(["playwright", "install", "chromium"], check=True)
 
 app = Flask(__name__)
 
@@ -76,4 +84,6 @@ def export_json():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # usa gunicorn se disponibile, altrimenti flask
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
