@@ -1,0 +1,79 @@
+🧠 COME VALUTA IL COPY
+
+Quando leads_hunter.py visita il sito di un potenziale lead (es. una landing per “lezione gratuita”), fa una vera mini-analisi di marketing del testo che trova.
+
+1️⃣ Estrazione del testo
+
+Usa BeautifulSoup o Playwright per catturare il testo visibile della pagina (no codice, no script, solo parole).
+
+Lo “pulisce” da:
+
+codice HTML
+
+frasi ripetute o menu
+
+footer e privacy policy
+
+👉 risultato: solo il corpo principale del testo promozionale.
+
+2️⃣ Ricerca di parole chiave persuasive
+
+Lo script cerca nel testo keyword legate a vendita e conversione, come:
+
+["lezione gratuita", "offerta", "iscriviti", "scopri", 
+ "prenota ora", "corsi online", "chiamaci", 
+ "inizia oggi", "posti limitati", "formazione", 
+ "prova gratis", "offerta speciale"]
+
+
+Più di queste trova → più alto lo score del copy.
+Ogni parola chiave ha un punteggio (es. “lezione gratuita” vale 15, “prenota ora” vale 10, ecc.).
+
+3️⃣ Analisi di chiarezza e leggibilità
+
+Usa un piccolo modello linguistico locale per capire quanto è leggibile il testo:
+
+Calcola il numero medio di parole per frase
+
+Conta verbi di azione (“inizia”, “prenota”, “ottieni”)
+
+Penalizza testi troppo lunghi, confusi o senza inviti all’azione
+
+Formula tipo:
+
+copy_score = (CTA + keyword_score + readability_score) - confusion_penalty
+
+4️⃣ Analisi del tono
+
+Attraverso analisi semantica, misura il tono del testo:
+
+Se è positivo o motivante (“scopri il tuo potenziale”, “impara con noi”) → bonus
+
+Se è freddo o burocratico → penalità
+
+Se è solo descrittivo senza CTA → penalità minore
+
+5️⃣ Esempio pratico
+🔥 Copy buono:
+
+“Prenota ora la tua lezione gratuita! Scopri come migliorare le tue competenze con il nostro corso online. Posti limitati!”
+
+→ Score copy: 90/100
+(chiaro, diretto, CTA, emozionale)
+
+🧊 Copy scarso:
+
+“La nostra azienda offre servizi di formazione professionale in diversi ambiti accademici.”
+
+→ Score copy: 40/100
+(no CTA, tono piatto, poco coinvolgente)
+
+6️⃣ Output finale
+
+Il punteggio del copy viene poi combinato con:
+
+qualità del sito (struttura HTML, SEO base, presenza form)
+
+chiarezza contatti (email/telefono)
+
+e forma il punteggio finale dello score lead.
