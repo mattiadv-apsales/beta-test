@@ -1,57 +1,89 @@
-# Lead Hunter
+Leads Hunter
 
-Lead Hunter è uno script Python che ricerca, analizza e classifica potenziali lead partendo da una lista di URL.
+Leads Hunter è uno script Python che ricerca potenziali leads caldi (landing page pubblicitarie) in modo completamente automatico, senza usare API, su:
 
-## ⚙️ Funzionalità
+- Meta Ads Library (Facebook Ads)
+- Reddit
+- LinkedIn
 
-* Estrazione automatica di **email**, **numeri di telefono**, **titolo della pagina** e **testo rilevante**.
-* Calcolo di uno **score di qualità** per ogni lead, basato su:
+Analizza fino a 30 possibili landing per piattaforma e assegna un punteggio di "calore" a ciascun lead in base a:
+- presenza di email e numeri di telefono
+- presenza di pagina di contatto o form
+- presenza di schema.org
+- qualità del testo (leggibilità, lunghezza, presenza di call to action)
 
-  * Presenza di contatti (email / telefono)
-  * Parole chiave come “lezione gratuita” o “contattaci”
-  * Facilità di lettura del testo (via `textstat`)
-  * Struttura del titolo
-* Generazione di un file di testo (`leads_report.txt`) con i risultati ordinati dal lead più caldo al meno caldo.
-* Limite di 30 lead analizzati per sito.
+I risultati vengono salvati in:
+- leads_report.txt → dettagli completi divisi per piattaforma
+- leads_sorted_by_score.txt → elenco ordinato dal più caldo al meno caldo
+- top25.txt → i 25 lead più caldi in assoluto
 
-## 📦 Installazione
+INSTALLAZIONE
 
-1. Clona o scarica il progetto.
-2. Installa le dipendenze richieste:
+1. Clona o scarica la cartella contenente leads_hunter.py, requirements.txt, e README.txt
 
-   ```bash
+2. (Opzionale) Crea un ambiente virtuale:
+   python -m venv venv
+   source venv/bin/activate   # Linux/macOS
+   venv\Scripts\activate      # Windows
+
+3. Installa le dipendenze:
    pip install -r requirements.txt
-   ```
-3. (Facoltativo) Crea un file `seed_urls.txt` con gli URL da analizzare, uno per riga.
 
-## 🚀 Utilizzo
+4. Installa i browser di Playwright (una sola volta):
+   playwright install
+
+UTILIZZO
 
 Esegui lo script:
+   python lead_hunter.py
 
-```bash
-python lead_hunter.py
-```
+Ti verrà chiesta una query di ricerca (esempio: "lezione gratuita").
 
-Inserisci la query quando richiesto. Il programma analizzerà fino a 30 URL, calcolerà gli score e creerà un report finale chiamato `leads_report.txt`.
+Lo script eseguirà automaticamente:
+- la ricerca su Meta Ads, Reddit e LinkedIn
+- il caricamento delle landing page trovate
+- l’analisi e il salvataggio dei risultati nei file .txt
 
-## 📄 Output
+OUTPUT
 
-Il file `leads_report.txt` includerà:
+- leads_report.txt → tutti i risultati divisi per piattaforma
+- leads_sorted_by_score.txt → elenco ordinato per punteggio (dal più caldo al meno caldo)
+- top25.txt → i 25 migliori lead complessivi
 
-* Posizione del risultato
-* URL analizzato
-* Titolo della pagina
-* Email trovate
-* Numeri di telefono trovati
-* Score assegnato
+Ogni lead include:
+Landing: https://example.com
+Domain: example.com
+Score: 78
+Emails: info@example.com
+Phones: +39 333 1234567
+Contact page: https://example.com/contatti
+Has form: True
+Has schema.org: True
+Has CTA: True
+Copy quality: 0.9
 
-I lead saranno elencati dal più caldo al meno caldo.
+LOGICA DI PUNTEGGIO
 
-## 🧠 Note
+Ogni lead riceve un punteggio 0–100 calcolato da:
 
-* Lo script ignora automaticamente URL di Facebook, WhatsApp e shortlink (es. bit.ly, t.co).
-* Puoi modificare la logica di punteggio nel metodo `score_lead()` per adattarla alle tue esigenze.
+Fattore                 Peso
+-------------------------------
+Email presente          +30
+Telefono presente       +20
+Pagina contatti         +10
+Form contatti            +8
+Schema.org               +8
+Qualità testo           +12
+Presenza CTA            +12
 
-## 💡 Suggerimento
+NOTE IMPORTANTI
 
-Per analisi più accurate o automatizzate (Google, LinkedIn, Reddit Ads), puoi estendere lo script con API di ricerca o scraping avanzato (es. SerpApi, Playwright).
+- Lo script non utilizza API e si limita a leggere contenuti pubblici.
+- Alcune piattaforme possono bloccare o modificare il markup nel tempo.
+- Usa lo script nel rispetto dei termini di servizio delle piattaforme e in modo etico.
+- Per maggiore scalabilità o stabilità, è possibile integrare rotazione proxy o CAPTCHA solver.
+
+AUTORE
+
+Mattia De Vincentis
+Web Developer & Digital Marketer

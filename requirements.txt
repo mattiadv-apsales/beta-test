@@ -1,4 +1,6 @@
+playwright
 requests
 beautifulsoup4
-tldextract
 textstat
+tldextract
+fake-useragent
