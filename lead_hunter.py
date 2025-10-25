@@ -1,4 +1,8 @@
-# lead_hunter_google_linkedin.py
+# lead_hunter.py
+# Single-file scraper per Meta Ads Library, Reddit, LinkedIn
+# - usa Playwright per renderizzare JS
+# - salva leads.json
+
 import time, re, json
 from urllib.parse import urlparse, urljoin, quote_plus
 from collections import defaultdict
@@ -18,15 +22,17 @@ MAX_PER_DOMAIN = 200
 POLITE_SLEEP = 1.0
 PAGE_TIMEOUT = 20000
 
-SOCIAL_BLOCK_DOMAINS = {"reddit.com", "redditinc.com", "redditblog.com", "metastatus.com",
-                        "reddithelp.com", "facebook.com","m.facebook.com","whatsapp.com",
-                        "wa.me","t.me","t.co","bit.ly","instagram.com","docs.google.com",
-                        "forms.gle","fb.com", "zoom.us"}
+SOCIAL_BLOCK_DOMAINS = {
+    "reddit.com", "redditinc.com", "redditblog.com", "metastatus.com",
+    "reddithelp.com", "facebook.com","m.facebook.com","whatsapp.com",
+    "wa.me","t.me","t.co","bit.ly","instagram.com","docs.google.com",
+    "forms.gle","fb.com", "zoom.us"
+}
 
 ua = UserAgent()
 HEADERS = {"User-Agent": ua.random}
 
-# Scoring weights
+# Pesi per il punteggio lead
 WEIGHTS = {
     "has_email": 30,
     "has_phone": 20,
@@ -56,14 +62,25 @@ def extract_emails(text):
     return []
 
 def extract_phones(text):
-    candidates = re.findall(r"(?:0|3)\d{8,9}", re.sub(r"\D", "", text))
+    """
+    Estrae un solo numero italiano valido dal testo.
+    Numeri mobili: 3XXXXXXXXX
+    Numeri fissi: 0XXXXXXXXX
+    Ritorna solo il primo numero valido.
+    """
+    # rimuove tutto tranne cifre
+    digits_only = re.sub(r"\D", "", text)
+    # trova sequenze di almeno 9 cifre che iniziano con 0 o 3
+    candidates = re.findall(r"(?:0|3)\d{8,9}", digits_only)
+
     for p in candidates:
         if len(p) == 10:
-            if p.startswith("0"):
+            if p.startswith("0"):  # fisso
                 return ["+39" + p]
-            elif p.startswith("3"):
+            elif p.startswith("3"):  # mobile
                 return ["+39" + p]
     return []
+
 
 def domain_of(url):
     try:
@@ -155,27 +172,22 @@ def scrape_reddit(page, query, max_items):
             if len(out)>=max_items: break
     return out
 
-def scrape_linkedin_google(query, max_items):
-    """
-    Cerca link LinkedIn pubblici tramite Google
-    """
+def scrape_linkedin(page, query, max_items):
     out=[]
-    url = f"https://www.google.com/search?q=site:linkedin.com+{quote_plus(query)}"
-    headers = {"User-Agent": ua.random}
-    try:
-        r = requests.get(url, headers=headers, timeout=8)
-        soup = BeautifulSoup(r.text, "html.parser")
-        seen = set()
-        for a in soup.find_all("a", href=True):
-            href = a["href"]
-            if "/url?q=" in href:
-                href = href.split("/url?q=")[1].split("&")[0]
-            if "linkedin.com" in href and href not in seen and not is_blocked_social(href):
-                seen.add(href)
-                out.append({"platform":"linkedin","title":href,"text":href,"landing":href})
-                if len(out)>=max_items: break
-    except:
-        pass
+    url=f"https://www.linkedin.com/search/results/content/?keywords={quote_plus(query)}"
+    try: page.goto(url, timeout=PAGE_TIMEOUT)
+    except: pass
+    time.sleep(1)
+    soup=BeautifulSoup(page.content(),"html.parser")
+    seen=set()
+    for a in soup.find_all("a", href=True):
+        href=a["href"]
+        txt=a.get_text(" ",strip=True)[:200]
+        if href.startswith("http") and "linkedin.com" not in href and not is_blocked_social(href):
+            if href in seen: continue
+            seen.add(href)
+            out.append({"platform":"linkedin","title":txt,"text":txt,"landing":href})
+            if len(out)>=max_items: break
     return out
 
 # ---------------- LANDING ANALYZER ----------------
@@ -221,27 +233,31 @@ def run_pipeline(query):
     with sync_playwright() as pw:
         browser = pw.chromium.launch(headless=True, args=["--no-sandbox"])
         page = browser.new_page()
-        page.set_extra_http_headers({"User-Agent": ua.random})
+        try: page.set_extra_http_headers({"User-Agent": ua.random})
+        except: pass
 
         for platform in PLATFORMS:
             if per_platform[platform]>=MAX_PER_PLATFORM: continue
             if platform=="meta": candidates=scrape_meta_ads(page, query, MAX_PER_PLATFORM)
             elif platform=="reddit": candidates=scrape_reddit(page, query, MAX_PER_PLATFORM)
-            elif platform=="linkedin": candidates=scrape_linkedin_google(query, MAX_PER_PLATFORM)
+            elif platform=="linkedin": candidates=scrape_linkedin(page, query, MAX_PER_PLATFORM)
             else: candidates=[]
+
             for cand in candidates:
                 if per_platform[platform]>=MAX_PER_PLATFORM: break
                 landing=cand.get("landing")
                 if not landing or is_blocked_social(landing): continue
                 dom=domain_of(landing)
                 if per_domain_count[dom]>=MAX_PER_DOMAIN: continue
+
                 try:
-                    landing_page=browser.new_page()
+                    landing_page = browser.new_page()
                     landing_page.set_extra_http_headers({"User-Agent": ua.random})
                     analysis=analyze_landing(landing_page, landing)
                     landing_page.close()
                 except:
                     continue
+
                 lead={
                     "platform": platform,
                     "source_title": cand.get("title") or cand.get("text",""),
@@ -258,9 +274,10 @@ def run_pipeline(query):
         page.close()
         browser.close()
 
-    sorted_results=sorted(results,key=lambda r:r["analysis"].get("score",0),reverse=True)
-    with open("leads.json","w",encoding="utf-8") as f:
-        json.dump(sorted_results,f,ensure_ascii=False,indent=2)
+    sorted_results=sorted(results, key=lambda r:r["analysis"].get("score",0), reverse=True)
+    with open("leads.json","w", encoding="utf-8") as f:
+        json.dump(sorted_results, f, ensure_ascii=False, indent=2)
+
     print(f"Saved {len(sorted_results)} leads to leads.json")
     return sorted_results
 
