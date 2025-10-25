@@ -6,3 +6,4 @@ tldextract
 fake-useragent
 Flask
 lxml
+gunicorn
