@@ -4,3 +4,5 @@ beautifulsoup4
 textstat
 tldextract
 fake-useragent
+Flask
+lxml

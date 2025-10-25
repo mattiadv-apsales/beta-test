@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Lead Hunter - Status</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Stato pipeline</h1>
+    <p>Running: {{ status.running }}</p>
+    <p>Last query: {{ status.last_query }}</p>
+    <p>Last started at: {{ status.last_started_at }}</p>
+    <p>Last finished at: {{ status.last_finished_at }}</p>
+    <p>Last count: {{ status.last_count }}</p>
+    <p><a href="/">Torna</a> | <a href="/top">Top 25</a> | <a href="/all">Tutti i leads</a></p>
+  </div>
+</body>
+</html>

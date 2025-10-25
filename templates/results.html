@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Risultati per "{{ query }}"</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Risultati per "{{ query }}"</h1>
+        <a href="{{ url_for('index') }}">Nuova ricerca</a>
+        <ul>
+        {% for lead in leads %}
+            <li>
+                <strong>{{ lead.source_title }}</strong> ({{ lead.platform }})<br>
+                Landing: <a href="{{ lead.landing }}" target="_blank">{{ lead.landing }}</a><br>
+                Email: {{ lead.analysis.emails | join(", ") }}<br>
+                Score: {{ lead.analysis.score }}
+            </li>
+        {% else %}
+            <li>Nessun lead trovato.</li>
+        {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

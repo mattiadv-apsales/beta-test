@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Leads</title>
+</head>
+<body>
+<h1>Leads trovati: {{ count }}</h1>
+<table border="1" cellpadding="5">
+<tr>
+<th>Title</th><th>Page Title</th><th>Email</th><th>Landing</th><th>Platform</th><th>Score</th>
+</tr>
+{% for lead in leads %}
+<tr>
+<td>{{ lead.source_title }}</td>
+<td>{{ lead.analysis.title }}</td>
+<td>{{ ", ".join(lead.analysis.emails) }}</td>
+<td><a href="{{ lead.landing }}" target="_blank">{{ lead.landing }}</a></td>
+<td>{{ lead.platform }}</td>
+<td>{{ lead.analysis.score }}</td>
+</tr>
+{% endfor %}
+</table>
+</body>
+</html>

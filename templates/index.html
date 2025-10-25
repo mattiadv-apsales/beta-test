@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Lead Hunter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+
+    <h1>Lead Hunter</h1>
+
+    <form id="search-form">
+        <input type="text" id="query" placeholder="Inserisci query" required>
+        <button type="submit">Cerca</button>
+    </form>
+
+    <div id="loader" style="display:none;">
+        <p>Analizzando, attendere...</p>
+        <div class="spinner"></div>
+    </div>
+
+    <div id="results"></div>
+
+    <div id="export-buttons" style="display:none; margin-top: 20px;">
+        <form method="get" action="/export/csv" style="display:inline;">
+            <button type="submit">Esporta in CSV</button>
+        </form>
+
+        <form method="get" action="/export/json" style="display:inline;">
+            <button type="submit">Esporta in JSON</button>
+        </form>
+    </div>
+
+</div>
+
+<script>
+const form = document.getElementById('search-form');
+const loader = document.getElementById('loader');
+const resultsDiv = document.getElementById('results');
+const exportDiv = document.getElementById('export-buttons');
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    resultsDiv.innerHTML = '';
+    exportDiv.style.display = 'none';
+    loader.style.display = 'block';
+
+    const query = document.getElementById('query').value;
+    try {
+        const res = await fetch('/api/scrape', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({query})
+        });
+
+        const data = await res.json();
+        loader.style.display = 'none';
+
+        if(data.error){
+            resultsDiv.innerHTML = `<p style="color:red;">${data.error}</p>`;
+            return;
+        }
+
+        if(data.length === 0){
+            resultsDiv.innerHTML = "<p>Nessun lead trovato.</p>";
+            return;
+        }
+
+        exportDiv.style.display = 'block';
+
+        let html = "<ul>";
+        data.forEach(lead => {
+            html += `<li>
+                        <strong>${lead.source_title}</strong> (${lead.platform})<br>
+                        Landing: <a href="${lead.landing}" target="_blank">${lead.landing}</a><br>
+                        Emails: ${lead.analysis.emails.join(", ")}<br>
+                        Phones: ${lead.analysis.phones.join(", ")}<br>
+                        Contact Page: <a href="${lead.analysis.contact_page}" target="_blank">${lead.analysis.contact_page || ''}</a><br>
+                        Score: ${lead.analysis.score}
+                    </li>`;
+        });
+        html += "</ul>";
+        resultsDiv.innerHTML = html;
+
+    } catch(err) {
+        loader.style.display = 'none';
+        resultsDiv.innerHTML = "<p style='color:red;'>Errore durante l'analisi.</p>";
+        console.error(err);
+    }
+});
+</script>
+</body>
+</html>
