@@ -1,0 +1,57 @@
+# Lead Hunter
+
+Lead Hunter è uno script Python che ricerca, analizza e classifica potenziali lead partendo da una lista di URL.
+
+## ⚙️ Funzionalità
+
+* Estrazione automatica di **email**, **numeri di telefono**, **titolo della pagina** e **testo rilevante**.
+* Calcolo di uno **score di qualità** per ogni lead, basato su:
+
+  * Presenza di contatti (email / telefono)
+  * Parole chiave come “lezione gratuita” o “contattaci”
+  * Facilità di lettura del testo (via `textstat`)
+  * Struttura del titolo
+* Generazione di un file di testo (`leads_report.txt`) con i risultati ordinati dal lead più caldo al meno caldo.
+* Limite di 30 lead analizzati per sito.
+
+## 📦 Installazione
+
+1. Clona o scarica il progetto.
+2. Installa le dipendenze richieste:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. (Facoltativo) Crea un file `seed_urls.txt` con gli URL da analizzare, uno per riga.
+
+## 🚀 Utilizzo
+
+Esegui lo script:
+
+```bash
+python lead_hunter.py
+```
+
+Inserisci la query quando richiesto. Il programma analizzerà fino a 30 URL, calcolerà gli score e creerà un report finale chiamato `leads_report.txt`.
+
+## 📄 Output
+
+Il file `leads_report.txt` includerà:
+
+* Posizione del risultato
+* URL analizzato
+* Titolo della pagina
+* Email trovate
+* Numeri di telefono trovati
+* Score assegnato
+
+I lead saranno elencati dal più caldo al meno caldo.
+
+## 🧠 Note
+
+* Lo script ignora automaticamente URL di Facebook, WhatsApp e shortlink (es. bit.ly, t.co).
+* Puoi modificare la logica di punteggio nel metodo `score_lead()` per adattarla alle tue esigenze.
+
+## 💡 Suggerimento
+
+Per analisi più accurate o automatizzate (Google, LinkedIn, Reddit Ads), puoi estendere lo script con API di ricerca o scraping avanzato (es. SerpApi, Playwright).
