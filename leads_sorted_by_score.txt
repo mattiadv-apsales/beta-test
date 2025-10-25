@@ -1,35 +1,29 @@
 Global leads sorted by score (highest -> lowest)
 
-#1 | Score: 95 | Platform: meta | https://scuolateatrosassari.artstribu.it/prenotazione/
+#1 | Score: 95 | Platform: meta | https://www.movimentodanza.org/friday-heels-dance/
+Emails: Logo_movimento_Danza_2021@2x.png, promozione@movimentodanza.org, info@movimentodanza.org
+------------------------------
+#2 | Score: 95 | Platform: meta | https://scuolateatrosassari.artstribu.it/prenotazione/
 Emails: scuolateatrosassari@gmail.com, faroteatrosassari@pec.it, esempio@esempio.com
 ------------------------------
-#2 | Score: 95 | Platform: meta | https://scuolateatrosassari.artstribu.it/prenotazione
+#3 | Score: 95 | Platform: meta | https://scuolateatrosassari.artstribu.it/prenotazione
 Emails: scuolateatrosassari@gmail.com, faroteatrosassari@pec.it, esempio@esempio.com
 ------------------------------
-#3 | Score: 91 | Platform: meta | https://spazioritmo.it/over50
-Emails: utente@dominio.com.
+#4 | Score: 91 | Platform: meta | https://www.cambridgeacademypalermo.it/hocus-lotus
+Emails: info@cambridgeacademy1965.it, wght@300..900, wght@100..900
 ------------------------------
-#4 | Score: 83 | Platform: meta | https://scuolateatrosassari.artstribu.it/corso-di-scrittura/
+#5 | Score: 83 | Platform: meta | https://scuolateatrosassari.artstribu.it/corso-di-scrittura/
 Emails: scuolateatrosassari@gmail.com, faroteatrosassari@pec.it
 ------------------------------
-#5 | Score: 83 | Platform: meta | https://cmbformazione.it/lezione-di-prova-gratuita/
-Emails: segreteria@cmbformazione.it
+#6 | Score: 83 | Platform: meta | https://bia.it/
+Emails: accademia.battistabia@gmail.com, accademia@bia.it, accademiabattistabia@pec.it
 ------------------------------
-#6 | Score: 73 | Platform: meta | https://www.milocura.it/
-Emails: intl-tel-input@25.2.0
+#7 | Score: 71 | Platform: meta | https://www.enjinia.it/aws-solution-architect.html
+Emails: hello@enjinia.it, info@enjinia.it
 ------------------------------
-#7 | Score: 58 | Platform: meta | https://forms.gle/Tzo8PEKqCAxn8vTN8
-Emails: info@ablativo.it
+#8 | Score: 63 | Platform: meta | https://lp.luigistips.it/scopri-il-sistema-social2
+Emails: esempio@esempio.it, flags@2x.png
 ------------------------------
-#8 | Score: 48 | Platform: meta | https://forms.gle/mAW6Q87ptsp9XUXC9
-Emails: 
-------------------------------
-#9 | Score: 48 | Platform: meta | https://docs.google.com/forms/d/e/1FAIpQLScsycTB6UfMdcjeMU0L4G2B4nClLFf4Z5N3p3GeASDUG9k_LQ/viewform?usp=header
-Emails: 
-------------------------------
-#10 | Score: 28 | Platform: meta | https://fb.com/messenger_doc/
-Emails: 
-------------------------------
-#11 | Score: 23 | Platform: meta | https://metastatus.com/ads-transparency
+#9 | Score: 45 | Platform: meta | https://www.aikidoaosta.it/
 Emails: 
 ------------------------------
