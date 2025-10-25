@@ -1,12 +1,4 @@
-# lead_hunter.py
-# Single-file scraper for Meta Ads Library, Reddit, LinkedIn
-# - uses Playwright to render JS
-# - outputs leads.json per Flask
-#
-# Requirements:
-# pip install playwright requests beautifulsoup4 textstat tldextract fake-useragent
-# playwright install
-
+# lead_hunter_google_linkedin.py
 import time, re, json
 from urllib.parse import urlparse, urljoin, quote_plus
 from collections import defaultdict
@@ -57,31 +49,21 @@ def is_blocked_social(url):
         return False
 
 def extract_emails(text):
-    # prendi solo la prima email valida "normale", ignora quelle con caratteri strani
     emails = EMAIL_RE.findall(text or "")
     for e in emails:
         if "@" in e and "..." not in e:
-            return [e]  # ritorna subito la prima valida
+            return [e]
     return []
 
 def extract_phones(text):
-    """
-    Estrae un solo numero italiano valido dal testo.
-    Numeri mobili: 3XXXXXXXXX
-    Numeri fissi: 0XXXXXXXXX
-    Ritorna solo il primo numero valido.
-    """
-    # trova numeri che iniziano con 0 o 3 e hanno almeno 9 cifre consecutive
     candidates = re.findall(r"(?:0|3)\d{8,9}", re.sub(r"\D", "", text))
-    
     for p in candidates:
         if len(p) == 10:
-            if p.startswith("0"):  # fisso
+            if p.startswith("0"):
                 return ["+39" + p]
-            elif p.startswith("3"):  # mobile
+            elif p.startswith("3"):
                 return ["+39" + p]
     return []
-
 
 def domain_of(url):
     try:
@@ -173,22 +155,27 @@ def scrape_reddit(page, query, max_items):
             if len(out)>=max_items: break
     return out
 
-def scrape_linkedin(page, query, max_items):
+def scrape_linkedin_google(query, max_items):
+    """
+    Cerca link LinkedIn pubblici tramite Google
+    """
     out=[]
-    url=f"https://www.linkedin.com/search/results/content/?keywords={quote_plus(query)}"
-    try: page.goto(url, timeout=PAGE_TIMEOUT)
-    except: pass
-    time.sleep(1)
-    soup=BeautifulSoup(page.content(),"html.parser")
-    seen=set()
-    for a in soup.find_all("a", href=True):
-        href=a["href"]
-        txt=a.get_text(" ",strip=True)[:200]
-        if href.startswith("http") and "linkedin.com" not in href and not is_blocked_social(href):
-            if href in seen: continue
-            seen.add(href)
-            out.append({"platform":"linkedin","title":txt,"text":txt,"landing":href})
-            if len(out)>=max_items: break
+    url = f"https://www.google.com/search?q=site:linkedin.com+{quote_plus(query)}"
+    headers = {"User-Agent": ua.random}
+    try:
+        r = requests.get(url, headers=headers, timeout=8)
+        soup = BeautifulSoup(r.text, "html.parser")
+        seen = set()
+        for a in soup.find_all("a", href=True):
+            href = a["href"]
+            if "/url?q=" in href:
+                href = href.split("/url?q=")[1].split("&")[0]
+            if "linkedin.com" in href and href not in seen and not is_blocked_social(href):
+                seen.add(href)
+                out.append({"platform":"linkedin","title":href,"text":href,"landing":href})
+                if len(out)>=max_items: break
+    except:
+        pass
     return out
 
 # ---------------- LANDING ANALYZER ----------------
@@ -214,7 +201,6 @@ def analyze_landing(page, landing_url):
     info["has_schema"]=has_schema_org(soup)
     info["has_cta"]=has_cta(soup)
     info["copy_quality"]=copy_quality_score(" ".join([p.get_text(" ",strip=True) for p in soup.find_all(["p","h1","h2","h3"])]))
-    # compute score
     raw=0
     if info["emails"]: raw+=WEIGHTS["has_email"]
     if info["phones"]: raw+=WEIGHTS["has_phone"]
@@ -227,45 +213,36 @@ def analyze_landing(page, landing_url):
     return info
 
 # ---------------- PIPELINE ----------------
-# ---------------- PIPELINE OTTIMIZZATA PER RENDER ----------------
 def run_pipeline(query):
     results=[]
     per_platform=defaultdict(int)
     per_domain_count=defaultdict(int)
 
     with sync_playwright() as pw:
-        # Launch Chromium con no-sandbox per Render
         browser = pw.chromium.launch(headless=True, args=["--no-sandbox"])
         page = browser.new_page()
-        try:
-            page.set_extra_http_headers({"User-Agent": ua.random})
-        except: pass
+        page.set_extra_http_headers({"User-Agent": ua.random})
 
         for platform in PLATFORMS:
             if per_platform[platform]>=MAX_PER_PLATFORM: continue
-
-            if platform=="meta": candidates = scrape_meta_ads(page, query, MAX_PER_PLATFORM)
-            elif platform=="reddit": candidates = scrape_reddit(page, query, MAX_PER_PLATFORM)
-            elif platform=="linkedin": candidates = scrape_linkedin(page, query, MAX_PER_PLATFORM)
+            if platform=="meta": candidates=scrape_meta_ads(page, query, MAX_PER_PLATFORM)
+            elif platform=="reddit": candidates=scrape_reddit(page, query, MAX_PER_PLATFORM)
+            elif platform=="linkedin": candidates=scrape_linkedin_google(query, MAX_PER_PLATFORM)
             else: candidates=[]
-
             for cand in candidates:
                 if per_platform[platform]>=MAX_PER_PLATFORM: break
-                landing = cand.get("landing")
+                landing=cand.get("landing")
                 if not landing or is_blocked_social(landing): continue
-                dom = domain_of(landing)
+                dom=domain_of(landing)
                 if per_domain_count[dom]>=MAX_PER_DOMAIN: continue
-
-                # Apri una nuova pagina temporanea per ciascun landing
                 try:
-                    landing_page = browser.new_page()
+                    landing_page=browser.new_page()
                     landing_page.set_extra_http_headers({"User-Agent": ua.random})
-                    analysis = analyze_landing(landing_page, landing)
-                    landing_page.close()  # Chiudi subito la pagina
+                    analysis=analyze_landing(landing_page, landing)
+                    landing_page.close()
                 except:
                     continue
-
-                lead = {
+                lead={
                     "platform": platform,
                     "source_title": cand.get("title") or cand.get("text",""),
                     "landing": landing,
@@ -274,20 +251,16 @@ def run_pipeline(query):
                     "collected_at": time.strftime("%Y-%m-%d %H:%M:%S")
                 }
                 results.append(lead)
-                per_platform[platform] += 1
-                per_domain_count[dom] += 1
+                per_platform[platform]+=1
+                per_domain_count[dom]+=1
                 time.sleep(POLITE_SLEEP)
 
         page.close()
         browser.close()
 
-    # sort by score
-    sorted_results = sorted(results, key=lambda r: r["analysis"].get("score",0), reverse=True)
-
-    # save JSON
-    with open("leads.json","w", encoding="utf-8") as f:
-        json.dump(sorted_results, f, ensure_ascii=False, indent=2)
-
+    sorted_results=sorted(results,key=lambda r:r["analysis"].get("score",0),reverse=True)
+    with open("leads.json","w",encoding="utf-8") as f:
+        json.dump(sorted_results,f,ensure_ascii=False,indent=2)
     print(f"Saved {len(sorted_results)} leads to leads.json")
     return sorted_results
 
